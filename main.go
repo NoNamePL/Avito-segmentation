@@ -1,9 +1,7 @@
 package main
 
 import (
-	"database/sql"
-	"fmt"
-	"net/http"
+	"Avito_Intern/handlers"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -18,30 +16,18 @@ const (
 )
 
 func main() {
-	psqlInfo := fmt.Sprintf("postgres://%s:%s@localhost:%d/%s?sslmode=disable", user, password, port, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
+
+	// db, err := db.Init()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// defer db.Close()
 
 	r := gin.Default()
-	r.GET("/create", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{
-			"message": "created",
-		})
-	})
+	r.POST("/create", handlers.Create)
 
-	r.GET("/update",func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK,gin.H{
-			"message":"uploaded",
-		})
-	})
+	r.POST("/update", handlers.Update)
 
-	r.GET("/delete", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK,gin.H{
-			"message":"deleted",
-		})
-	})
+	r.GET("/delete", handlers.Delete)
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
