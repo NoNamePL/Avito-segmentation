@@ -7,22 +7,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "admin"
-	password = "postgreswd"
-	dbname   = "Avito_segmentations"
-)
 
 func main() {
 
-	// db, err := db.Init()
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// defer db.Close()
-
+	 
 	r := gin.Default()
 	r.POST("/create", handlers.Create)
 

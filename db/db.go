@@ -5,16 +5,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
-type Segment struct {
-	userID int      `json:"user_id"`
-	Items  []string `json:"Items"`
-}
-
-type Segmentations struct {
-	Segments []Segment
-}
 
 const (
 	host   = "localhost"
@@ -24,13 +18,14 @@ const (
 )
 
 var db *sql.DB
-
+// Инициализация БД
 func Init() (*sql.DB, error) {
-
-	psqlPassword, ok := os.LookupEnv("PSQLPass")
-	if !ok {
-		log.Fatal("Can't connect to .env")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
 	}
+	psqlPassword := os.Getenv("PSQLPass")
+
 	psqlInfo := fmt.Sprintf("postgres://%s:%s@localhost:%d/%s?sslmode=disable", user, psqlPassword, port, dbname)
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
